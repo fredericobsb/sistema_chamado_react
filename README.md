@@ -8,3 +8,8 @@ Aula 103 - Cadastrando usuario parte 2
 
 * Instalou toastfy com o comando:
       npm install react-toastify
+
+Aula 106 - Criando header
+
+*instalou icons do react com o comando:
+npm install react-icons
