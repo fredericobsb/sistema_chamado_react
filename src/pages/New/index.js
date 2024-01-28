@@ -5,15 +5,17 @@ import Title from '../../components/Title'
 import { FiPlusCircle} from 'react-icons/fi'
 import {AuthContext} from '../../contexts/auth'
 import { db } from '../../services/firebaseConnection'
-import {collection, getDocs, getDoc, doc, addDoc} from 'firebase/firestore'
+import {collection, getDocs, getDoc, doc, addDoc, updateDoc} from 'firebase/firestore'
 import './new.css';
 import { toast } from 'react-toastify'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const listRef = collection(db, "customers");
 
 export default function New(){
 
   const { user } = useContext(AuthContext);
+  const {id} = useParams();
 
   const [customers, setCustomers] = useState([])
   const [loadCustomer, setLoadCustomer] = useState(true);
@@ -22,6 +24,10 @@ export default function New(){
   const [complemento, setComplemento] = useState('')
   const [assunto, setAssunto] = useState('Suporte')
   const [status, setStatus] = useState('Aberto')
+
+  //para saber se vai ser inserido ou editado.
+  const [idCustomer, setIdCustomer] = useState(false)
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadCustomers(){
@@ -45,6 +51,9 @@ export default function New(){
 
         setCustomers(lista);
         setLoadCustomer(false);
+        if(id){
+          loadId(lista);
+        }
 
       })
       .catch((error) => {
@@ -55,8 +64,27 @@ export default function New(){
     }
 
     loadCustomers();    
-  }, [])
+  }, [id])
 
+  async function loadId(lista){
+    const docRef = doc(db, "chamados", id);
+    await getDoc(docRef)
+    .then((snapshot) => {
+      setAssunto(snapshot.data().assunto)
+      setStatus(snapshot.data().status)
+      setComplemento(snapshot.data().complemento);
+
+
+      let index = lista.findIndex(item => item.id === snapshot.data().clienteId)
+      setCustomerSelected(index);
+      setIdCustomer(true);
+
+    })
+    .catch((error) => {
+      console.log(error);
+      setIdCustomer(false);
+    })
+  }
 
   function handleOptionChange(e){
     console.log(e.target.value);
@@ -75,6 +103,31 @@ export default function New(){
 
   async function handleRegister(e){
     e.preventDefault();
+    if(idCustomer){
+      //Atualizar um chamado
+      const docRef = doc(db,"chamados", id);
+      await updateDoc(docRef, {
+        cliente: customers[customerSelected].nomeFantasia,
+        clienteId: customers[customerSelected].id,
+        assunto: assunto,
+        complemento: complemento,
+        status:status,
+        userId: user.uid
+      })
+      .then(() =>{
+        toast.info("Chamado Atualizado com Sucesso!");
+        setCustomerSelected(0);
+        setComplemento('');
+        navigate('/dashboard');
+      })
+      .catch((error) =>{
+          toast.error("Erro ao atualizar o chamado...");
+          console.log(error);
+      })
+    }
+    
+    
+    
     //Registrar um chamado no firebase
     await addDoc(collection(db, "chamados"),{
         created: new Date(),
@@ -101,7 +154,7 @@ export default function New(){
       <Header/>
 
       <div className="content">
-        <Title name="Novo chamado">
+        <Title name={id ? "Edição de Chamado" : "Novo Chamado"}>
           <FiPlusCircle size={25}/>
         </Title>
 
