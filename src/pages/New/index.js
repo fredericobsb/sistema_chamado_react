@@ -119,14 +119,14 @@ export default function New(){
         setCustomerSelected(0);
         setComplemento('');
         navigate('/dashboard');
+        
       })
       .catch((error) =>{
           toast.error("Erro ao atualizar o chamado...");
           console.log(error);
       })
+      return;
     }
-    
-    
     
     //Registrar um chamado no firebase
     await addDoc(collection(db, "chamados"),{
@@ -142,6 +142,7 @@ export default function New(){
         toast.success("Chamado registrado!")
         setComplemento('')
         setCustomerSelected(0)
+        navigate('/dashboard');
       })
       .catch((error) => {
         toast.error("Ops erro ao registrar, tente mais tarde!")
@@ -224,7 +225,7 @@ export default function New(){
               onChange={ (e) => setComplemento(e.target.value) }
             />
 
-            <button type="submit">Registrar</button>
+            <button type="submit">Salvar</button>
 
           </form>
         </div>
