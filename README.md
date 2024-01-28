@@ -3,3 +3,8 @@
 1 - crie o banco de dados no firebase
 2 - clique no simbolo "web" para adicionar o banco ao projeto
 3 - instale o firebase no projeto com o comando: npm install firebase
+
+Aula 103 - Cadastrando usuario parte 2
+
+* Instalou toastfy com o comando:
+      npm install react-toastify
