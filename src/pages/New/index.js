@@ -78,6 +78,7 @@ export default function New(){
     //Registrar um chamado no firebase
     await addDoc(collection(db, "chamados"),{
         created: new Date(),
+        cliente: customers[customerSelected].nomeFantasia,
         clienteId: customers[customerSelected].id,
         assunto: assunto,
         complemento: complemento,

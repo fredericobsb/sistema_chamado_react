@@ -13,3 +13,9 @@ Aula 106 - Criando header
 
 *instalou icons do react com o comando:
 npm install react-icons
+
+Aula 119 - Buscando chamados no banco de dados
+
+* instalou a biblioteca de datas com o comando:
+ npm install date-fns
+ https://date-fns.org/
