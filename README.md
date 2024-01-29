@@ -19,3 +19,19 @@ Aula 119 - Buscando chamados no banco de dados
 * instalou a biblioteca de datas com o comando:
  npm install date-fns
  https://date-fns.org/
+
+ ******** BUILD E DEPLOY DO PROJETO ********** 
+
+ 1) Crie uma conta no site https://app.netlify.com/
+
+ 2) na pasta public, crie um arquivo "_redirects" com o conteudo abaixo:
+       /* /index.html 200
+
+3) Crie a build do projeto com o comando:
+      npm run build
+
+4) Instale o netlify no projeto:
+          npm install -g netlify-cli
+
+5) Rode o comando:
+        netlify deploy
